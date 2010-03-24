@@ -1,6 +1,6 @@
 package agh.mr.lab2;
 
-import agh.mr.lab2.strategies.Strategy;
+import agh.mr.lab2.strategy.Strategy;
 
 import java.util.HashMap;
 
