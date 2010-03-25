@@ -11,10 +11,10 @@ public abstract class Strategy {
 
     ElFarloBar elFarloBar;
 
-    protected Strategy(ElFarloBar elFarloBar) {
+    public Strategy(ElFarloBar elFarloBar) {
         this.elFarloBar = elFarloBar;
     }
 
-    public abstract boolean makeAssumption() ;
+    public abstract boolean makeAssumption();
 
 }
