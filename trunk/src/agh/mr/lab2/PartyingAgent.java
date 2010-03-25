@@ -13,5 +13,5 @@ public interface PartyingAgent {
 
     public void addStrategy(Strategy strategy);
 
-    public void learnFromTheExperience(boolean isCrowded);
+    public void learnFromTheExperience();
 }

@@ -1,5 +1,10 @@
 package agh.mr.lab2.strategy;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import agh.mr.lab2.ElFarloBar;
 
 /**
@@ -7,15 +12,17 @@ import agh.mr.lab2.ElFarloBar;
  *
  * @author: Michal Orzechowski
  */
-public class AlwaysPartyStrategy extends Strategy {
+public class AlwaysPartyStrategy implements Strategy {
 
-    public AlwaysPartyStrategy(ElFarloBar elFarloBar) {
-        super(elFarloBar);
-    }
+	@Override
+	public boolean makeAssumption(LinkedList<Integer> history, int crowdenessBoundary) {
+		return true;
+	}
 
-    @Override
-    public boolean makeAssumption() {
-        return true;
-    }
+	@Override
+	public int makePreciseAssumption(LinkedList<Integer> history,
+			int crowdenessBoundary) {
+		throw new NotImplementedException();
+	}
 
 }

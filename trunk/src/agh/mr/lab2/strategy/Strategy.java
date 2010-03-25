@@ -1,5 +1,8 @@
 package agh.mr.lab2.strategy;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import agh.mr.lab2.ElFarloBar;
 
 /**
@@ -7,14 +10,10 @@ import agh.mr.lab2.ElFarloBar;
  *
  * @author: Michal Orzechowski
  */
-public abstract class Strategy {
+public interface Strategy {
 
-    ElFarloBar elFarloBar;
-
-    public Strategy(ElFarloBar elFarloBar) {
-        this.elFarloBar = elFarloBar;
-    }
-
-    public abstract boolean makeAssumption();
+    public boolean makeAssumption(LinkedList<Integer> history, int crowdenessBoundary);
+    
+    public int makePreciseAssumption(LinkedList<Integer> history, int crowdenessBoundary); 
 
 }

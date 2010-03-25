@@ -21,8 +21,9 @@ public class ElFarloBar {
     }
 
     public void closeBar() {
-        crowdednessHistory.add(barCrowdedness);
+        getCrowdednessHistory().add(barCrowdedness);
         barCrowdedness = 0;
+  	
     }
 
     public void registerGuest() {
@@ -38,16 +39,17 @@ public class ElFarloBar {
         Random random = new Random();
 
         for (int i = 0; i < numberOfHistoryRecords; i++) {
-            crowdednessHistory.add(random.nextInt());
+            getCrowdednessHistory().add(random.nextInt());
         }
     }
 
     public void printBarsHistory() {
         System.out.println("ElFarloBar history:");
-        for (Integer historyRecord : crowdednessHistory) {
+        for (Integer historyRecord : getCrowdednessHistory()) {
             System.out.println("  " + historyRecord);
         }
         System.out.println();
     }
+
 
 }
