@@ -9,17 +9,18 @@ import java.util.Map;
 /**
  * created at: Mar 23, 2010, 10:54:49 PM
  *
- * @author: Michal Orzechowski
+ * @author: Michal Orzechowski, lewickitom
  */
 public class JazzLovingAgent implements PartyingAgent {
 
-    /* Strategy and its effectiveness */
+    /* constant used in rating system */
+	public static final double LAMBDA=0.3;
+    
+	/* Strategy and its rating -  the lower the better */
     private HashMap<Strategy, Double> strategiesRegistry = new HashMap<Strategy, Double>();
     private HashMap<Strategy, Integer> lastAssumptions= new HashMap<Strategy, Integer>();
     
     private ElFarloBar elFarloBar;
-    
-    public static final double LAMBDA=0.3;
     
     
     public JazzLovingAgent(ElFarloBar elFarloBar){
@@ -28,49 +29,51 @@ public class JazzLovingAgent implements PartyingAgent {
     	
     }
     
+    public void addStrategy(Strategy strategy) {
+        
+        strategiesRegistry.put(strategy, 0.0);
+        
+    }
+    
+    /* updates ratings of each strategy on the base of accuracies of their last predictions  */
     public void learnFromTheExperience() {
         
     	double currError=0.0;
-    	double newEffectiveness=0.0;
-    	double currEffectiveness=0.0;
+    	double newRating=0.0;
+    	double currRating=0.0;
     	
     	for(Map.Entry<Strategy,Double> strategyEntry:strategiesRegistry.entrySet()){
     		
     		currError=Math.abs(lastAssumptions.get(strategyEntry.getKey())-elFarloBar.getCrowdednessHistory().getLast());
-    		currEffectiveness=strategyEntry.getValue();
-    		newEffectiveness=(LAMBDA*currEffectiveness)+(1.0-LAMBDA)*(currError);
-    		strategyEntry.setValue(newEffectiveness);
+    		currRating=strategyEntry.getValue();
+    		newRating=(LAMBDA*currRating)+(1.0-LAMBDA)*(currError);
+    		strategyEntry.setValue(newRating);
     		
     	}
-    	
     	
     }
     
     public boolean isGoingToParty() {
-
         
     	calculateAssumptions();
         Strategy chosenStrategy = chooseBestStrategy();
- 	
-        //   return chosenStrategy.makeAssumption(elFarloBar.getCrowdednessHistory(),elFarloBar.crowdednessBoundary);
-        if(chosenStrategy.makePreciseAssumption(elFarloBar.getCrowdednessHistory(),elFarloBar.crowdednessBoundary)<elFarloBar.crowdednessBoundary)
+        int assumption=chosenStrategy.makePreciseAssumption(elFarloBar.getCrowdednessHistory(),elFarloBar.crowdednessBoundary);
+        
+        if(assumption<elFarloBar.crowdednessBoundary)
         	return true;
-        else return false;
+        else 
+        	return false;
        	  
     }
 
-    public void addStrategy(Strategy strategy) {
-        
-    	/* Not sure if 0 is good initial value for the learning process.
-         */
-        strategiesRegistry.put(strategy, 0.0);
-        
-    }
 
+    
+    /* pick strategy with the lowest  */
     private Strategy chooseBestStrategy(){
     	
     	Map.Entry<Strategy,Double> currentBest=null;
     	for(Map.Entry<Strategy,Double> strategyEntry:strategiesRegistry.entrySet()){
+    	
     		if(currentBest==null || currentBest.getValue()>strategyEntry.getValue())
     			currentBest=strategyEntry;
     	
@@ -79,18 +82,15 @@ public class JazzLovingAgent implements PartyingAgent {
     	
     }
     
-    
+    /* calculates assumptions for each strategy and store results - necessary to evaluate strategies */
     private void calculateAssumptions(){
-    	
     	
     	for(Strategy strategy:strategiesRegistry.keySet()){
     		
-    		int assumption=strategy.makePreciseAssumption(elFarloBar.getCrowdednessHistory(), elFarloBar.crowdednessBoundary);
-    	
+    		int assumption=strategy.makePreciseAssumption(elFarloBar.getCrowdednessHistory(), elFarloBar.crowdednessBoundary);	
     		lastAssumptions.put(strategy,assumption);
     		
     	}
-    
     }
     
 }
